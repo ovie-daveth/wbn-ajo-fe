@@ -1,16 +1,16 @@
-import type { ReactNode } from 'react';
-import { Pressable, View } from 'react-native';
+import { AppButton } from '@/components/common/AppButton';
+import { Heading } from '@/components/ui/heading';
+import { HStack } from '@/components/ui/hstack';
+import { Text } from '@/components/ui/text';
+import { VStack } from '@/components/ui/vstack';
+import { heroGradientStops } from '@/constants/theme';
+import { useThemeMode } from '@/hooks/useThemeMode';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 import { ChevronLeft } from 'lucide-react-native';
+import type { ReactNode } from 'react';
+import { Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Heading } from '@/components/ui/heading';
-import { Text } from '@/components/ui/text';
-import { HStack } from '@/components/ui/hstack';
-import { VStack } from '@/components/ui/vstack';
-import { AppButton } from '@/components/common/AppButton';
-import { heroGradientStops } from '@/constants/theme';
-import { useThemeMode } from '@/hooks/useThemeMode';
 
 type OnboardingShellProps = {
   step: number;
@@ -78,7 +78,7 @@ export function OnboardingShell({
           </HStack>
           <Heading className="text-[28px] font-extrabold leading-tight">{title}</Heading>
           <Text className="text-[15px] leading-6 text-typography-gray">{body}</Text>
-          {footer ?? (onNext && <AppButton title={nextLabel} onPress={onNext} variant="dark" />)}
+          {footer ?? (onNext && <AppButton className='h-12' title={nextLabel} onPress={onNext} variant="dark" />)}
         </VStack>
       </SafeAreaView>
     </View>

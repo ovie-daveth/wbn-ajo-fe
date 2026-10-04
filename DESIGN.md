@@ -225,5 +225,8 @@ Dark mode: same layout; gradient stops switch (§2.5); glass stays white-translu
 - [x] `brand/WivLogo` + `common/*` library; onboarding ×3; Invest landing + 3-tab bar.
 - [x] Cooperative conversion: Naira everywhere, APR for loans, contributions/dues model,
       no interest-on-savings copy (AER fully removed).
+- [x] Auth screens (`(auth)/signup`, `(auth)/login`): email + Google (expo-auth-session,
+      needs OAuth client IDs in `.env` + dev build) + Apple (native button, iOS, works in
+      Expo Go). Sessions persist in SecureStore (`utils/session.ts`). No backend yet.
 - [ ] Home / Analysis / Wallet tab content (placeholders in place).
 - [ ] Real auth + backend wiring behind Sign up / Log in (currently enter directly).
