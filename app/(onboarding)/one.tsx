@@ -10,7 +10,7 @@ export default function OnboardingOne() {
       body="Community funding is the easiest way to raise money for your startup idea."
       visual={<BankCardStack />}
       onNext={() => router.push('/(onboarding)/two')}
-      onSkip={() => router.replace('/(tabs)/invest')}
+      onSkip={() => router.replace('/(tabs)/home')}
     />
   );
 }

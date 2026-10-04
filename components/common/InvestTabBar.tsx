@@ -1,6 +1,7 @@
 import { Pressable, View } from 'react-native';
 import { House, ChartPie, Wallet } from 'lucide-react-native';
 import type { LucideIcon } from 'lucide-react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { HStack } from '@/components/ui/hstack';
 import { ThemedIcon } from '@/components/common/ThemedIcon';
 import { useThemeMode } from '@/hooks/useThemeMode';
@@ -22,17 +23,18 @@ const VISIBLE_TABS: { name: string; label: string; icon: LucideIcon }[] = [
 ];
 
 /**
- * Floating bottom-center pill bar. Exactly 3 tabs; the hidden `invest` route
- * (landing after onboarding) intentionally highlights none.
+ * Floating bottom-center pill bar. Exactly 3 tabs, active = filled pill.
+ * Bottom padding follows the device home indicator so they never overlap.
  */
 export function InvestTabBar({ state, navigation }: InvestTabBarProps) {
   const { isDark } = useThemeMode();
+  const insets = useSafeAreaInsets();
   const activeName = state.routes[state.index]?.name;
   const pillClass = isDark ? 'bg-white' : 'bg-typography-black';
   const pillIconColor = isDark ? '#0A0F1E' : '#FFFFFF';
 
   return (
-    <View className="items-center pb-7">
+    <View className="items-center" style={{ paddingBottom: insets.bottom + 16 }}>
       <HStack className="items-center gap-1 rounded-full border border-border bg-secondary p-1.5 shadow-soft-1">
         {VISIBLE_TABS.map((tab) => {
           const active = tab.name === activeName;

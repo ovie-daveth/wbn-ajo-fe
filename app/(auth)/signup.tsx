@@ -1,19 +1,19 @@
-import { useState } from 'react';
-import { Alert, Pressable } from 'react-native';
-import { router } from 'expo-router';
-import { HStack } from '@/components/ui/hstack';
-import { VStack } from '@/components/ui/vstack';
-import { Text } from '@/components/ui/text';
-import { Input, InputField } from '@/components/ui/input';
 import { AppButton } from '@/components/common/AppButton';
 import { AuthDivider, AuthShell } from '@/components/features/auth/AuthShell';
 import { AppleButton, GoogleButton } from '@/components/features/auth/SocialButtons';
+import { HStack } from '@/components/ui/hstack';
+import { Input, InputField } from '@/components/ui/input';
+import { Text } from '@/components/ui/text';
+import { VStack } from '@/components/ui/vstack';
 import { saveSession } from '@/utils/session';
+import { router } from 'expo-router';
+import { useState } from 'react';
+import { Alert, Pressable } from 'react-native';
 
 export default function SignupScreen() {
   const [email, setEmail] = useState('');
   const [busy, setBusy] = useState(false);
-  const enter = () => router.replace('/(tabs)/invest');
+  const enter = () => router.replace('/(tabs)/home');
 
   const continueWithEmail = async () => {
     const value = email.trim().toLowerCase();
@@ -57,7 +57,7 @@ export default function SignupScreen() {
           />
         </Input>
       </VStack>
-      <AppButton title="Continue with email" onPress={continueWithEmail} loading={busy} variant="dark" />
+      <AppButton  title="Continue with email" onPress={continueWithEmail} loading={busy} variant="dark" />
       <AuthDivider />
       <GoogleButton label="Sign up with Google" onAuthenticated={enter} />
       <AppleButton mode="signup" onAuthenticated={enter} />

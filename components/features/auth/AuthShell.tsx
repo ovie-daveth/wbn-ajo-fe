@@ -11,7 +11,7 @@ import { VStack } from '@/components/ui/vstack';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
 import { Divider } from '@/components/ui/divider';
-import { WivLogo } from '@/components/brand/WivLogo';
+import { WivMark } from '@/components/brand/WivMark';
 import { heroGradientStops } from '@/constants/theme';
 import { useThemeMode } from '@/hooks/useThemeMode';
 
@@ -35,7 +35,7 @@ export function AuthShell({ title, body, children, footer, onBack }: AuthShellPr
         style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 300 }}
       />
       <StatusBar style="light" />
-      <SafeAreaView className="flex-1" edges={['top']}>
+      <SafeAreaView className="flex-1" edges={['top', 'bottom']}>
         <Pressable
           onPress={onBack ?? (() => router.back())}
           accessibilityLabel="Back"
@@ -44,9 +44,8 @@ export function AuthShell({ title, body, children, footer, onBack }: AuthShellPr
         >
           <ChevronLeft size={26} color="#fff" />
         </Pressable>
-        <VStack className="items-center gap-2 py-5">
-          <WivLogo size="lg" variant="tile" />
-          <Text className="text-xl font-bold tracking-tight text-white">wbn-Invest</Text>
+        <VStack className="items-center py-5">
+          <WivMark size="lg" />
         </VStack>
         <ScrollView
           className="flex-1"

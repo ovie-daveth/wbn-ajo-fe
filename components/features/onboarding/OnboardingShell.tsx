@@ -9,7 +9,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 import { ChevronLeft } from 'lucide-react-native';
 import type { ReactNode } from 'react';
-import { Pressable, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 type OnboardingShellProps = {
@@ -26,7 +26,10 @@ type OnboardingShellProps = {
   footer?: ReactNode;
 };
 
-/** Full-screen blue gradient + bottom sheet. Shared by all 3 onboarding screens. */
+/**
+ * Full-screen blue gradient + bottom sheet. Shared by all 3 onboarding screens.
+ * The whole body scrolls so short screens never clip the visual or the sheet.
+ */
 export function OnboardingShell({
   step,
   total = 3,
@@ -65,21 +68,28 @@ export function OnboardingShell({
           )}
         </HStack>
 
-        <View className="flex-1 items-center justify-center px-8">{visual}</View>
+        <ScrollView
+          className="flex-1"
+          contentContainerClassName="grow"
+          showsVerticalScrollIndicator={false}
+          bounces={false}
+        >
+          <View className="min-h-[220px] flex-1 items-center justify-center px-8 py-4">{visual}</View>
 
-        <VStack className="gap-4 rounded-t-[28px] bg-background px-6 pb-10 pt-6">
-          <HStack className="gap-1.5">
-            {Array.from({ length: total }).map((_, i) => (
-              <View
-                key={i}
-                className={i + 1 === step ? 'h-1.5 w-6 rounded-full bg-foreground' : 'h-1.5 w-1.5 rounded-full bg-border'}
-              />
-            ))}
-          </HStack>
-          <Heading className="text-[28px] font-extrabold leading-tight">{title}</Heading>
-          <Text className="text-[15px] leading-6 text-typography-gray">{body}</Text>
-          {footer ?? (onNext && <AppButton className='h-12' title={nextLabel} onPress={onNext} variant="dark" />)}
-        </VStack>
+          <VStack className="gap-4 rounded-t-[28px] bg-background px-6 pb-10 pt-6">
+            <HStack className="gap-1.5">
+              {Array.from({ length: total }).map((_, i) => (
+                <View
+                  key={i}
+                  className={i + 1 === step ? 'h-1.5 w-6 rounded-full bg-foreground' : 'h-1.5 w-1.5 rounded-full bg-border'}
+                />
+              ))}
+            </HStack>
+            <Heading className="text-[28px] font-extrabold leading-tight">{title}</Heading>
+            <Text className="text-[15px] leading-6 text-typography-gray">{body}</Text>
+            {footer ?? (onNext && <AppButton title={nextLabel} onPress={onNext} variant="dark" />)}
+          </VStack>
+        </ScrollView>
       </SafeAreaView>
     </View>
   );

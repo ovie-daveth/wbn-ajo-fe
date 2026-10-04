@@ -138,7 +138,7 @@ Loan rates as `3.00% APR` + one-line explainer beneath. **No savings-interest co
 app/                          # ROUTES ONLY — compose, never implement
   _layout.tsx                 # GluestackUIProvider + theme + font + splash, starts at (onboarding)
   (onboarding)/               # one, two, three (shared OnboardingShell)
-  (tabs)/                     # invest (landing), home, analysis, wallet + floating InvestTabBar
+  (tabs)/                     # home (Invest dashboard, landing), analysis, wallet + floating InvestTabBar
   modal.tsx
 components/
   ui/                         # VENDOR primitives (Gluestack copy-paste, @ts-nocheck). Never edit styling here.
@@ -190,7 +190,7 @@ EmptyState({ icon, title, body?, actionLabel?, onAction? })
    Title `Low-interest loans for members`, body about eligibility through contributions.
    Footer: black `Sign up for free` pill + `Already signed up? Log in` → both enter `(tabs)/invest`.
 
-### 6.2 Invest (post-onboarding landing, `(tabs)/invest` — hidden tab)
+### 6.2 Home — Invest dashboard (`(tabs)/home`, post-onboarding landing)
 
 Order top→bottom, all inside one `ScrollView` except the floating tab bar:
 
@@ -204,7 +204,8 @@ Order top→bottom, all inside one `ScrollView` except the floating tab bar:
    `Weekly and monthly dues keep your membership active`): rows with check icon + name +
    amount + status (`Weekly Contribution ₦5,000 Paid`, `October Dues ₦20,000 Due Friday`).
 6. `InvestTabBar`: floating pill, exactly 3 icons (Home / Analysis / Wallet), active = filled pill.
-   Invest highlights none. Home/Analysis/Wallet are branded placeholders until designed.
+   Home renders the dashboard until the real Home design lands; Analysis/Wallet are branded
+   placeholders.
 
 Dark mode: same layout; gradient stops switch (§2.5); glass stays white-translucent; tiles go
 `bg-secondary`; active tab pill becomes white w/ black icon.
@@ -228,5 +229,6 @@ Dark mode: same layout; gradient stops switch (§2.5); glass stays white-translu
 - [x] Auth screens (`(auth)/signup`, `(auth)/login`): email + Google (expo-auth-session,
       needs OAuth client IDs in `.env` + dev build) + Apple (native button, iOS, works in
       Expo Go). Sessions persist in SecureStore (`utils/session.ts`). No backend yet.
-- [ ] Home / Analysis / Wallet tab content (placeholders in place).
+- [ ] Real Home design (Invest dashboard currently stands in; move it aside then) /
+      Analysis / Wallet tab content.
 - [ ] Real auth + backend wiring behind Sign up / Log in (currently enter directly).

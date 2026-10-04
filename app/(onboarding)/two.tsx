@@ -11,7 +11,7 @@ export default function OnboardingTwo() {
       visual={<ContributionPreview />}
       onNext={() => router.push('/(onboarding)/three')}
       onBack={() => router.back()}
-      onSkip={() => router.replace('/(tabs)/invest')}
+      onSkip={() => router.replace('/(tabs)/home')}
     />
   );
 }

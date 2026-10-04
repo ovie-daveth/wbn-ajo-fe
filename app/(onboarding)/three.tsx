@@ -17,7 +17,7 @@ export default function OnboardingThree() {
       onBack={() => router.back()}
       footer={
         <VStack className="gap-3">
-          <AppButton title="Sign up for free" onPress={() => router.push('/(auth)/signup')} variant="dark" />
+          <AppButton className='h-12' title="Sign up for free" onPress={() => router.push('/(auth)/signup')} variant="dark" />
           <HStack className="items-center justify-center gap-1">
             <Text className="text-sm text-typography-gray">Already signed up?</Text>
             <Pressable onPress={() => router.push('/(auth)/login')} hitSlop={8}>

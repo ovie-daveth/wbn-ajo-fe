@@ -13,7 +13,7 @@ import { saveSession } from '@/utils/session';
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [busy, setBusy] = useState(false);
-  const enter = () => router.replace('/(tabs)/invest');
+  const enter = () => router.replace('/(tabs)/home');
 
   const loginWithEmail = async () => {
     const value = email.trim().toLowerCase();

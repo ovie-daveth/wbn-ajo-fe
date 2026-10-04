@@ -30,7 +30,7 @@ export function AppButton({
       <Button
         onPress={onPress}
         isDisabled={disabled || loading}
-        className={`${shapeClass} bg-typography-black dark:bg-white ${className}`}
+        className={`${shapeClass} bg-typography-black dark:bg-white h-12 ${className}`}
       >
         {loading && <ButtonSpinner className="text-white dark:text-typography-black" />}
         <ButtonText className="font-semibold text-white dark:text-typography-black">
