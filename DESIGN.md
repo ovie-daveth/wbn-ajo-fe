@@ -150,6 +150,7 @@ components/
     invest/                   # BalanceHeader, PocketPill, QuickActionGrid, LoanCards, ContributionsSection
 constants/
   theme.ts                    # blues, heroGradientStops(mode), radius (single import for features)
+  rates.ts                    # ALL money figures (env-overridable, see §9) — screens read from `rates`
   Colors.ts                   # legacy tab tint — keep in sync with theme.ts
 hooks/                        # useThemeMode
 utils/                        # formatMoney, formatWholeNaira, formatApr
@@ -229,6 +230,27 @@ Dark mode: same layout; gradient stops switch (§2.5); glass stays white-translu
 - [x] Auth screens (`(auth)/signup`, `(auth)/login`): email + Google (expo-auth-session,
       needs OAuth client IDs in `.env` + dev build) + Apple (native button, iOS, works in
       Expo Go). Sessions persist in SecureStore (`utils/session.ts`). No backend yet.
+- [x] Rates centralized in `constants/rates.ts` (env-overridable, §9 reference).
 - [ ] Real Home design (Invest dashboard currently stands in; move it aside then) /
       Analysis / Wallet tab content.
+
+## 9. Configurable rates (env → `constants/rates.ts` → every screen)
+
+All money figures live in **`constants/rates.ts`** — components read from `rates`, never hardcode.
+Override with `EXPO_PUBLIC_*` vars (see `.env.example`); values bake in at startup, so restart
+after changing: `npx expo start -c`.
+
+| Env var | Default | Surfaces |
+|---|---|---|
+| `EXPO_PUBLIC_EMERGENCY_LOAN_APR` | `5` | Onboarding 3 body + `LoanPreview` caption/pills, `LoanCards` Emergency rate |
+| `EXPO_PUBLIC_BUSINESS_LOAN_APR` | `10` | `LoanPreview` pills, `LoanCards` Business rate |
+| `EXPO_PUBLIC_HEADLINE_LOAN_MAX` | `500000` | Onboarding 3 body + `LoanPreview` display (`₦500,000`) |
+| `EXPO_PUBLIC_EMERGENCY_LOAN_MAX` | `200000` | `LoanCards` Emergency cap |
+| `EXPO_PUBLIC_BUSINESS_LOAN_MAX` | `1000000` | `LoanCards` Business cap |
+| `EXPO_PUBLIC_WEEKLY_CONTRIBUTION` | `5000` | `ContributionPreview` Weekly card, `ContributionsSection` row |
+| `EXPO_PUBLIC_MONTHLY_CONTRIBUTION` | `20000` | `ContributionPreview` Monthly card, `ContributionsSection` dues, `PocketPill` default |
+
+Formatting stays in `utils/format.ts` (`formatMoney`, `formatWholeNaira`, `formatApr`).
+Rule addition: a `grep -r "₦[0-9]\|[0-9]% APR" app components --include="*.tsx"` outside
+`constants/rates.ts` is a bug — route it through `rates`.
 - [ ] Real auth + backend wiring behind Sign up / Log in (currently enter directly).

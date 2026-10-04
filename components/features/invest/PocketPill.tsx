@@ -4,6 +4,7 @@ import { Text } from '@/components/ui/text';
 import { GlassCard } from '@/components/common/GlassCard';
 import { MoneyText } from '@/components/common/MoneyText';
 import { WivLogo } from '@/components/brand/WivLogo';
+import { rates } from '@/constants/rates';
 import { formatMoney } from '@/utils/format';
 
 type PocketPillProps = {
@@ -12,8 +13,8 @@ type PocketPillProps = {
   amount?: number;
 };
 
-/** Frosted contributions pill on the hero gradient. */
-export function PocketPill({ name = 'Contributions', tag = 'October · Paid', amount = 20000 }: PocketPillProps) {
+/** Frosted contributions pill on the hero gradient. Defaults to the monthly tier from `rates`. */
+export function PocketPill({ name = 'Contributions', tag = 'October · Paid', amount = rates.monthlyContribution }: PocketPillProps) {
   return (
     <GlassCard className="mx-5 mt-5 p-4">
       <HStack className="items-center gap-3">

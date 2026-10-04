@@ -4,6 +4,8 @@ import { OnboardingShell } from '@/components/features/onboarding/OnboardingShel
 import { HStack } from '@/components/ui/hstack';
 import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
+import { rates } from '@/constants/rates';
+import { formatApr, formatWholeNaira } from '@/utils/format';
 import { router } from 'expo-router';
 import { Pressable } from 'react-native';
 
@@ -12,7 +14,7 @@ export default function OnboardingThree() {
     <OnboardingShell
       step={3}
       title="Low-interest loans for members"
-      body="Active members can borrow up to ₦500,000 from just 5% APR. Your contributions keep you eligible."
+      body={`Active members can borrow up to ${formatWholeNaira(rates.headlineLoanMax)} from just ${formatApr(rates.emergencyLoanApr)}. Your contributions keep you eligible.`}
       visual={<LoanPreview />}
       onBack={() => router.back()}
       footer={

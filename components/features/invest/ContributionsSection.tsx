@@ -6,13 +6,14 @@ import { Box } from '@/components/ui/box';
 import { ThemedIcon } from '@/components/common/ThemedIcon';
 import { AppCard } from '@/components/common/AppCard';
 import { SectionHeader } from '@/components/common/SectionHeader';
+import { rates } from '@/constants/rates';
 import { formatWholeNaira } from '@/utils/format';
 
 type Due = { name: string; amount: number; status: string; overdue?: boolean };
 
 const DEFAULT_DUES: Due[] = [
-  { name: 'Weekly Contribution', amount: 5000, status: 'Paid' },
-  { name: 'October Dues', amount: 20000, status: 'Due Friday', overdue: true },
+  { name: 'Weekly Contribution', amount: rates.weeklyContribution, status: 'Paid' },
+  { name: 'October Dues', amount: rates.monthlyContribution, status: 'Due Friday', overdue: true },
 ];
 
 /** Member dues. Weekly/monthly contributions prove continued membership for loan access. */
