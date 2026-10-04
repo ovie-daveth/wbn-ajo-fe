@@ -1,4 +1,3 @@
-import { Box } from '@/components/ui/box';
 import { HStack } from '@/components/ui/hstack';
 import { Text } from '@/components/ui/text';
 
@@ -8,38 +7,30 @@ type WivLogoProps = {
   dark?: boolean;
 };
 
-const TILE: Record<NonNullable<WivLogoProps['size']>, { box: string; mark: string; word: string }> = {
-  sm: { box: 'h-8 w-8 rounded-lg', mark: 'text-sm', word: 'text-base' },
-  md: { box: 'h-11 w-11 rounded-xl', mark: 'text-base', word: 'text-lg' },
-  lg: { box: 'h-14 w-14 rounded-2xl', mark: 'text-xl', word: 'text-2xl' },
-};
+const SIZES = {
+  sm: { mark: 'text-sm', word: 'text-base' },
+  md: { mark: 'text-base', word: 'text-lg' },
+  lg: { mark: 'text-xl', word: 'text-2xl' },
+} as const;
 
 /**
- * WIV test-combo logo. Text-based, no image asset.
- * tile: blue monogram tile · tile-wordmark: tile + "wbn-Invest" · mono: single color for heroes.
+ * WIV test-combo logo. Text-based, no image asset — and NEVER a background box.
+ * tile: bare italic monogram · tile-wordmark: monogram + "wbn-Invest" · mono: single-color mark.
+ * (For the gradient wordmark with sub-label, prefer WivMark.)
  */
 export function WivLogo({ size = 'md', variant = 'tile-wordmark', dark = false }: WivLogoProps) {
-  const s = TILE[size];
+  const s = SIZES[size];
+  const markColor = dark ? 'text-white' : 'text-primary';
 
-  if (variant === 'mono') {
-    return (
-      <Text className={`${s.word} font-extrabold tracking-tight ${dark ? 'text-white' : 'text-primary'}`}>
-        WIV
-      </Text>
-    );
-  }
-
-  const tile = (
-    <Box className={`${s.box} items-center justify-center bg-primary`}>
-      <Text className={`${s.mark} font-extrabold tracking-tight text-white`}>WIV</Text>
-    </Box>
+  const mark = (
+    <Text className={`${s.mark} font-extrabold italic tracking-tight ${markColor}`}>WIV</Text>
   );
 
-  if (variant === 'tile') return tile;
+  if (variant === 'tile' || variant === 'mono') return mark;
 
   return (
     <HStack className="items-center gap-2">
-      {tile}
+      {mark}
       <Text className={`${s.word} font-bold tracking-tight text-foreground`}>
         wbn-<Text className="text-primary">Invest</Text>
       </Text>

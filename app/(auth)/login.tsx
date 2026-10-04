@@ -7,11 +7,13 @@ import { Text } from '@/components/ui/text';
 import { Input, InputField } from '@/components/ui/input';
 import { AppButton } from '@/components/common/AppButton';
 import { AuthDivider, AuthShell } from '@/components/features/auth/AuthShell';
+import { PasswordField } from '@/components/features/auth/PasswordField';
 import { AppleButton, GoogleButton } from '@/components/features/auth/SocialButtons';
 import { saveSession } from '@/utils/session';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const enter = () => router.replace('/(tabs)/home');
 
@@ -19,6 +21,10 @@ export default function LoginScreen() {
     const value = email.trim().toLowerCase();
     if (!value.includes('@')) {
       Alert.alert('Enter a valid email', 'Use the email you signed up with.');
+      return;
+    }
+    if (!password) {
+      Alert.alert('Enter your password', 'Your password is required to log in.');
       return;
     }
     setBusy(true);
@@ -53,9 +59,12 @@ export default function LoginScreen() {
             keyboardType="email-address"
             autoCapitalize="none"
             autoComplete="email"
-            onSubmitEditing={loginWithEmail}
           />
         </Input>
+      </VStack>
+      <VStack className="gap-1.5">
+        <Text className="text-sm font-medium">Password</Text>
+        <PasswordField value={password} onChangeText={setPassword} onSubmitEditing={loginWithEmail} />
       </VStack>
       <AppButton title="Log in" onPress={loginWithEmail} loading={busy} variant="dark" />
       <AuthDivider />

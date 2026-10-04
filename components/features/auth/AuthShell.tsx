@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Pressable, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, Pressable, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 import { ChevronLeft } from 'lucide-react-native';
@@ -36,6 +36,11 @@ export function AuthShell({ title, body, children, footer, onBack }: AuthShellPr
       />
       <StatusBar style="light" />
       <SafeAreaView className="flex-1" edges={['top', 'bottom']}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        className="flex-1"
+        keyboardVerticalOffset={0}
+      >
         <Pressable
           onPress={onBack ?? (() => router.back())}
           accessibilityLabel="Back"
@@ -60,6 +65,7 @@ export function AuthShell({ title, body, children, footer, onBack }: AuthShellPr
             {footer}
           </VStack>
         </ScrollView>
+      </KeyboardAvoidingView>
       </SafeAreaView>
     </View>
   );

@@ -1,9 +1,9 @@
+import { WivMark } from '@/components/brand/WivMark';
 import { GlassCard } from '@/components/common/GlassCard';
 import { HStack } from '@/components/ui/hstack';
 import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
 import { View } from 'react-native';
-import { WivMark } from '@/components/brand/WivMark';
 
 /**
  * Two fanned frosted bank cards, WIV-branded. Decorative.
@@ -13,8 +13,8 @@ export function BankCardStack() {
   return (
     <View className="relative h-64 w-full" accessible={false}>
       {/* Back card — low left, tilted left. */}
-      <View className="absolute bottom-0 left-0 w-[64%]" style={{ transform: [{ rotate: '-12deg' }] }}>
-        <GlassCard className="p-4">
+      <View className="absolute -bottom-7 left-10 w-[64%]" style={{ transform: [{ rotate: '0deg' }] }}>
+        <GlassCard className="p-4 w-60">
           <VStack className="gap-3">
             <WivMark />
             <VStack className="gap-0.5">
@@ -29,8 +29,8 @@ export function BankCardStack() {
         </GlassCard>
       </View>
       {/* Front card — high right, tilted right, rendered on top. */}
-      <View className="absolute right-0 top-0 w-[64%]" style={{ transform: [{ rotate: '12deg' }] }}>
-        <GlassCard className="p-4">
+      <View className="absolute -right-2 top-0 w-[64%]" style={{ transform: [{ rotate: '0deg' }] }}>
+        <GlassCard className="p-4 w-60">
           <VStack className="gap-3">
             <WivMark />
             <VStack className="gap-0.5">

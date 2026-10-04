@@ -1,9 +1,8 @@
-import { HStack } from '@/components/ui/hstack';
-import { VStack } from '@/components/ui/vstack';
-import { Text } from '@/components/ui/text';
 import { GlassCard } from '@/components/common/GlassCard';
 import { MoneyText } from '@/components/common/MoneyText';
-import { WivLogo } from '@/components/brand/WivLogo';
+import { HStack } from '@/components/ui/hstack';
+import { Text } from '@/components/ui/text';
+import { VStack } from '@/components/ui/vstack';
 import { rates } from '@/constants/rates';
 import { formatMoney } from '@/utils/format';
 
@@ -18,7 +17,7 @@ export function PocketPill({ name = 'Contributions', tag = 'October · Paid', am
   return (
     <GlassCard className="mx-5 mt-5 p-4">
       <HStack className="items-center gap-3">
-        <WivLogo size="sm" variant="tile" />
+        {/* <WivMark size="md" /> */}
         <VStack className="flex-1 gap-0">
           <Text className="text-[15px] font-bold text-white">{name}</Text>
           <Text className="text-xs text-white/70">{tag}</Text>

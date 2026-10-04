@@ -8,6 +8,7 @@ export type MemberSession = {
   userId: string;
   email?: string | null;
   name?: string | null;
+  phone?: string | null;
   idToken?: string | null;
 };
 
