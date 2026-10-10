@@ -9,10 +9,12 @@ import { HStack } from '@/components/ui/hstack';
 import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
 import { clearSession, type MemberSession } from '@/utils/session';
+import { isKycVerified, loadProfile, type KycStatus } from '@/utils/profile';
 import { router } from 'expo-router';
 import type { LucideIcon } from 'lucide-react-native';
 import { Award, BadgeCheck, LogOut, Mail, Phone, User, X } from 'lucide-react-native';
-import { Alert, Pressable, ScrollView } from 'react-native';
+import { Pressable, ScrollView } from 'react-native';
+import { useEffect, useState } from 'react';
 import Animated, { FadeIn, FadeOut, SlideInLeft, SlideOutLeft } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -48,10 +50,25 @@ function ProfileRow({
 
 /**
  * Slide-in profile sidebar. Backdrop tap or X closes it.
- * Grade + KYC are demo values until the backend provides them.
+ * Grade is a demo value until the backend provides it; KYC reflects the
+ * saved profile (`utils/profile.ts`).
  */
 export function HomeDrawer({ open, session, onClose }: HomeDrawerProps) {
+  const [kycStatus, setKycStatus] = useState<KycStatus>('incomplete');
+  const [profilePhone, setProfilePhone] = useState('');
+
+  useEffect(() => {
+    if (open) {
+      loadProfile().then((p) => {
+        setKycStatus(isKycVerified(p) ? 'verified' : p.kycStatus);
+        setProfilePhone(p.phone);
+      });
+    }
+  }, [open]);
+
   if (!open) return null;
+
+  const verified = kycStatus === 'verified';
 
   const name = session?.name?.trim() || 'Member';
   const initials = name
@@ -100,7 +117,7 @@ export function HomeDrawer({ open, session, onClose }: HomeDrawerProps) {
                     <BadgeText>Tier 1</BadgeText>
                   </Badge>
                   <Badge variant="outline">
-                    <BadgeText>KYC Unverified</BadgeText>
+                    <BadgeText>{verified ? 'KYC Verified' : 'KYC Unverified'}</BadgeText>
                   </Badge>
                 </HStack>
               </VStack>
@@ -109,16 +126,28 @@ export function HomeDrawer({ open, session, onClose }: HomeDrawerProps) {
 
               <ProfileRow icon={User} label="Full name" value={session?.name?.trim() || '—'} />
               <ProfileRow icon={Mail} label="Email" value={session?.email ?? '—'} />
-              <ProfileRow icon={Phone} label="Phone number" value={session?.phone ?? 'Not provided'} />
+              <ProfileRow
+                icon={Phone}
+                label="Phone number"
+                value={profilePhone || session?.phone || 'Not provided'}
+              />
               <ProfileRow icon={Award} label="Account grade" value="Tier 1" />
-              <ProfileRow icon={BadgeCheck} label="Verification status (KYC)" value="Unverified" accent />
+              <ProfileRow
+                icon={BadgeCheck}
+                label="Verification status (KYC)"
+                value={verified ? 'Verified' : 'Unverified'}
+                accent={!verified}
+              />
 
               <AppButton
-                title="Verify identity"
+                title={verified ? 'Update profile' : 'Verify identity'}
                 variant="outline"
                 shape="rounded"
                 className="mt-3"
-                onPress={() => Alert.alert('Coming soon', 'Identity verification will open here.')}
+                onPress={() => {
+                  onClose();
+                  router.push('/kyc');
+                }}
               />
             </ScrollView>
 

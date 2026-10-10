@@ -233,6 +233,11 @@ Dark mode: same layout on plain surfaces; tiles go `bg-secondary`.
       (expo-auth-session, needs OAuth client IDs in `.env` + dev build) + Apple
       (native button, iOS, works in Expo Go). Sessions persist in SecureStore (`utils/session.ts`). No backend yet.
 - [x] Rates centralized in `constants/rates.ts` (env-overridable, §9 reference).
+- [x] Contribute flow (`/contribute`: frequency + presets/custom + confirm + receipt,
+      demo ledger in SecureStore) gated by `KycGateModal` — incomplete profile/KYC opens
+      the modal instead. Profile + KYC journey (`/kyc`: name/phone → dob/address →
+      ID type+number → review, `utils/profile.ts` demo stub, instant-verify until the
+      backend `/members/*` review queue lands). Drawer shows live KYC status + entry point.
 - [ ] Real Home design (Invest dashboard currently stands in; move it aside then) /
       Analysis / Wallet tab content.
 

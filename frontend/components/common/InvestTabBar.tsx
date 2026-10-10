@@ -52,7 +52,7 @@ export function InvestTabBar({ state, navigation }: InvestTabBarProps) {
                 accessibilityLabel={tab.label}
                 accessibilityState={{ selected: true }}
                 hitSlop={6}
-                android_ripple={{ color: 'rgba(47,103,246,0.2)', borderless: false }}
+                android_ripple={{ color: 'rgba(10,15,30,0.2)', borderless: true, radius: 24 }}
                 style={({ pressed }) => [{ opacity: pressed ? 0.75 : 1 }]}
                 className="flex-row items-center gap-1.5 rounded-full bg-white px-4 py-2.5"
               >
