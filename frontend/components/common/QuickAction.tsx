@@ -11,10 +11,19 @@ type QuickActionProps = {
   onPress?: () => void;
 };
 
-/** 64pt icon tile + label. Used for Deposit / Withdraw / Brain / Splitter. */
+/** 64pt icon tile + label. Ripple on Android, scale + fade everywhere. */
 export function QuickAction({ icon, label, onPress }: QuickActionProps) {
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={label} hitSlop={4}>
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      hitSlop={4}
+      android_ripple={{ color: 'rgba(47,103,246,0.18)', borderless: false }}
+      style={({ pressed }) => [
+        { opacity: pressed ? 0.75 : 1, transform: [{ scale: pressed ? 0.94 : 1 }] },
+      ]}
+    >
       <VStack className="w-[68px] items-center gap-2">
         <Box className="h-16 w-16 items-center justify-center rounded-2xl bg-secondary">
           <ThemedIcon icon={icon} size={24} />

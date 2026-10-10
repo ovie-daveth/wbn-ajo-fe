@@ -1,4 +1,4 @@
-import { GlassCard } from '@/components/common/GlassCard';
+import { AppCard } from '@/components/common/AppCard';
 import { MoneyText } from '@/components/common/MoneyText';
 import { HStack } from '@/components/ui/hstack';
 import { Text } from '@/components/ui/text';
@@ -12,20 +12,17 @@ type PocketPillProps = {
   amount?: number;
 };
 
-/** Frosted contributions pill on the hero gradient. Defaults to the monthly tier from `rates`. */
+/** Contributions summary card. Defaults to the monthly tier from `rates`. */
 export function PocketPill({ name = 'Contributions', tag = 'October · Paid', amount = rates.monthlyContribution }: PocketPillProps) {
   return (
-    <GlassCard className="mx-5 mt-5 p-4">
+    <AppCard className="p-4">
       <HStack className="items-center gap-3">
-        {/* <WivMark size="md" /> */}
         <VStack className="flex-1 gap-0">
-          <Text className="text-[15px] font-bold text-white">{name}</Text>
-          <Text className="text-xs text-white/70">{tag}</Text>
+          <Text className="text-[15px] font-bold">{name}</Text>
+          <Text className="text-xs text-typography-gray">{tag}</Text>
         </VStack>
-        <MoneyText size="title" className="text-white">
-          {formatMoney(amount)}
-        </MoneyText>
+        <MoneyText size="title">{formatMoney(amount)}</MoneyText>
       </HStack>
-    </GlassCard>
+    </AppCard>
   );
 }

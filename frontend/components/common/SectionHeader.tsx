@@ -15,7 +15,12 @@ export function SectionHeader({ title, actionLabel, onAction }: SectionHeaderPro
     <HStack className="items-center justify-between">
       <Heading className="text-lg font-bold">{title}</Heading>
       {actionLabel && (
-        <Pressable onPress={onAction} hitSlop={8}>
+        <Pressable
+          onPress={onAction}
+          hitSlop={8}
+          android_ripple={{ color: 'rgba(47,103,246,0.15)', borderless: true }}
+          style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
+        >
           <Text className="text-sm font-semibold text-primary">{actionLabel}</Text>
         </Pressable>
       )}

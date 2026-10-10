@@ -5,6 +5,7 @@ import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
 import { Text } from '@/components/ui/text';
 import { MoneyText } from '@/components/common/MoneyText';
+import { ThemedIcon } from '@/components/common/ThemedIcon';
 import { formatMoney } from '@/utils/format';
 
 type BalanceHeaderProps = {
@@ -14,7 +15,7 @@ type BalanceHeaderProps = {
   onNotificationsPress?: () => void;
 };
 
-/** Menu + bell row with centered contributions total. Lives on the hero gradient (white icons/text). */
+/** Menu + bell row with centered contributions total. Plain surface. */
 export function BalanceHeader({
   balance = 85500,
   caption = 'Total contributions · Active member',
@@ -22,24 +23,34 @@ export function BalanceHeader({
   onNotificationsPress,
 }: BalanceHeaderProps) {
   return (
-    <VStack className="gap-4 px-5 pt-2">
+    <VStack className="gap-4">
       <HStack className="items-center justify-between">
-        <Pressable onPress={onMenuPress} accessibilityLabel="Open menu" hitSlop={8}>
-          <Box className="h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/25">
-            <Menu size={20} color="#fff" />
+        <Pressable
+          onPress={onMenuPress}
+          accessibilityLabel="Open menu"
+          hitSlop={8}
+          android_ripple={{ color: 'rgba(47,103,246,0.15)', borderless: true }}
+          style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
+        >
+          <Box className="h-11 w-11 items-center justify-center rounded-full bg-secondary">
+            <ThemedIcon icon={Menu} size={20} />
           </Box>
         </Pressable>
-        <Pressable onPress={onNotificationsPress} accessibilityLabel="Notifications" hitSlop={8}>
-          <Box className="h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/25">
-            <Bell size={20} color="#fff" />
+        <Pressable
+          onPress={onNotificationsPress}
+          accessibilityLabel="Notifications"
+          hitSlop={8}
+          android_ripple={{ color: 'rgba(47,103,246,0.15)', borderless: true }}
+          style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
+        >
+          <Box className="h-11 w-11 items-center justify-center rounded-full bg-secondary">
+            <ThemedIcon icon={Bell} size={20} />
           </Box>
         </Pressable>
       </HStack>
       <VStack className="items-center gap-0.5">
-        <MoneyText size="display" className="text-white">
-          {formatMoney(balance)}
-        </MoneyText>
-        <Text className="text-sm text-white/70">{caption}</Text>
+        <MoneyText size="display">{formatMoney(balance)}</MoneyText>
+        <Text className="text-sm text-typography-gray">{caption}</Text>
       </VStack>
     </VStack>
   );

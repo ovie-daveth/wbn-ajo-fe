@@ -126,11 +126,12 @@ Loan rates as `3.00% APR` + one-line explainer beneath. **No savings-interest co
 ## 4. Shape, spacing, elevation
 
 - Radius: cards `rounded-2xl`, pills/action tiles `rounded-xl`, buttons `rounded-full` (primary CTA)
-  or `rounded-xl` (in-card). Bottom tab bar: floating `rounded-full` bar.
+  or `rounded-xl` (in-card). Bottom tab bar: floating dark pill.
 - Spacing: screen padding `p-5`, card gaps `gap-3/4`, section gap `gap-5`.
 - Shadows: `shadow-soft-1` on the floating tab bar (both modes use borders elsewhere).
-- Bottom nav: floating bar (`rounded-full border-border bg-secondary`), exactly 3 icons
-  (Home / Analysis / Wallet), active item = black pill w/ white icon in light mode (invert in dark).
+- Bottom nav: floating black pill (`rounded-full bg-black`) on the layout background,
+  active tab = white capsule with icon + label, inactive = dimmed bare icons.
+  Safe-area padded so it never touches system navigation.
 
 ## 5. Compartmentalised architecture (reusable components)
 
@@ -138,7 +139,7 @@ Loan rates as `3.00% APR` + one-line explainer beneath. **No savings-interest co
 app/                          # ROUTES ONLY — compose, never implement
   _layout.tsx                 # GluestackUIProvider + theme + font + splash, starts at (onboarding)
   (onboarding)/               # one, two, three (shared OnboardingShell)
-  (tabs)/                     # home (Invest dashboard, landing), analysis, wallet + floating InvestTabBar
+  (tabs)/                     # home (Invest dashboard, landing), analysis, wallet + standard InvestTabBar
   modal.tsx
 components/
   ui/                         # VENDOR primitives (Gluestack copy-paste, @ts-nocheck). Never edit styling here.
@@ -193,23 +194,22 @@ EmptyState({ icon, title, body?, actionLabel?, onAction? })
 
 ### 6.2 Home — Invest dashboard (`(tabs)/home`, post-onboarding landing)
 
-Order top→bottom, all inside one `ScrollView` except the floating tab bar:
+Plain surface (no hero gradient), all inside one `ScrollView` above the standard tab bar:
 
-1. `BalanceHeader` (on gradient): avatar left, bell right, centered `₦85,500.00` display +
+1. `BalanceHeader`: avatar left, bell right, centered `₦85,500.00` display +
    `Total contributions · Active member` caption.
-2. `PocketPill`: glass row — `WIV` chip + `Contributions / October · Paid` + `₦20,000.00`.
+2. `PocketPill`: summary row — `Contributions / October · Paid` + `₦20,000.00`.
 3. `QuickActionGrid`: 4 `QuickAction` tiles (`Contribute`, `Borrow`, `Repay`, `Receipts`).
 4. `LoanCards`: 2-col `AppCard`s — `Emergency Loan / from 3.00% APR / Up to ₦200,000`,
    `Business Loan / from 5.00% APR / Up to ₦1,000,000`, each with blue chip icon.
 5. `ContributionsSection` (`SectionHeader` title `Contributions`, action `Contribute`, subtitle
    `Weekly and monthly dues keep your membership active`): rows with check icon + name +
    amount + status (`Weekly Contribution ₦5,000 Paid`, `October Dues ₦20,000 Due Friday`).
-6. `InvestTabBar`: floating pill, exactly 3 icons (Home / Analysis / Wallet), active = filled pill.
-   Home renders the dashboard until the real Home design lands; Analysis/Wallet are branded
-   placeholders.
+6. `InvestTabBar`: floating black pill, exactly 3 tabs (Home / Analysis / Wallet),
+   active = white capsule with icon + label. Home renders the dashboard until the real
+   Home design lands; Analysis/Wallet are branded placeholders.
 
-Dark mode: same layout; gradient stops switch (§2.5); glass stays white-translucent; tiles go
-`bg-secondary`; active tab pill becomes white w/ black icon.
+Dark mode: same layout on plain surfaces; tiles go `bg-secondary`.
 
 ## 7. States, a11y, motion
 

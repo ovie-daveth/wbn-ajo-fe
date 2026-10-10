@@ -29,7 +29,7 @@ export const brandInk = {
 
 export type ThemeMode = 'light' | 'dark';
 
-/** Hero gradient stops (top → surface) for onboarding + invest header. */
+/** Hero gradient stops (top → surface) for onboarding + auth heroes. */
 export function heroGradientStops(mode: ThemeMode): [string, string, string, string] {
   return mode === 'dark'
     ? [brandBlue[950], brandBlue[800], brandBlue[600], brandInk[950]]
