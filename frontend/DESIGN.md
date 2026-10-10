@@ -227,9 +227,11 @@ Dark mode: same layout; gradient stops switch (§2.5); glass stays white-translu
 - [x] `brand/WivLogo` + `common/*` library; onboarding ×3; Invest landing + 3-tab bar.
 - [x] Cooperative conversion: Naira everywhere, APR for loans, contributions/dues model,
       no interest-on-savings copy (AER fully removed).
-- [x] Auth screens (`(auth)/signup`, `(auth)/login`): email + Google (expo-auth-session,
-      needs OAuth client IDs in `.env` + dev build) + Apple (native button, iOS, works in
-      Expo Go). Sessions persist in SecureStore (`utils/session.ts`). No backend yet.
+- [x] Auth screens (`(auth)/signup`, `(auth)/login`): passwordless email OTP —
+      shared `EmailOtpJourney` (email → 6-digit code, resend cooldown, `utils/otp.ts`
+      demo stub until the backend `/auth/email/*` endpoints land) + Google
+      (expo-auth-session, needs OAuth client IDs in `.env` + dev build) + Apple
+      (native button, iOS, works in Expo Go). Sessions persist in SecureStore (`utils/session.ts`). No backend yet.
 - [x] Rates centralized in `constants/rates.ts` (env-overridable, §9 reference).
 - [ ] Real Home design (Invest dashboard currently stands in; move it aside then) /
       Analysis / Wallet tab content.

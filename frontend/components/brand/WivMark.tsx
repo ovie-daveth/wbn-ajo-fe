@@ -32,7 +32,7 @@ export function WivMark({ size = 'md', tone = 'onGradient', color, subColor }: W
         WIV
       </Text>
       <Text style={{ color: sub }} className={`${s.sub} font-medium`}>
-        wbn-Invest
+       
       </Text>
     </HStack>
   );

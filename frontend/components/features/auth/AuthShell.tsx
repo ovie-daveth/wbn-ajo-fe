@@ -1,19 +1,18 @@
-import type { ReactNode } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { StatusBar } from 'expo-status-bar';
-import { ChevronLeft } from 'lucide-react-native';
-import { router } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native';
-import { HStack } from '@/components/ui/hstack';
-import { VStack } from '@/components/ui/vstack';
-import { Heading } from '@/components/ui/heading';
-import { Text } from '@/components/ui/text';
-import { Divider } from '@/components/ui/divider';
 import { WivMark } from '@/components/brand/WivMark';
+import { Divider } from '@/components/ui/divider';
+import { Heading } from '@/components/ui/heading';
+import { HStack } from '@/components/ui/hstack';
+import { Text } from '@/components/ui/text';
+import { VStack } from '@/components/ui/vstack';
 import { heroGradientStops } from '@/constants/theme';
 import { useThemeMode } from '@/hooks/useThemeMode';
+import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { ChevronLeft } from 'lucide-react-native';
+import type { ReactNode } from 'react';
+import { KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type AuthShellProps = {
   title: string;
@@ -60,7 +59,7 @@ export function AuthShell({ title, body, children, footer, onBack }: AuthShellPr
         >
           <VStack className="grow gap-4 rounded-t-[28px] bg-background px-6 pb-10 pt-6">
             <Heading className="text-[26px] font-extrabold leading-tight">{title}</Heading>
-            <Text className="text-[15px] leading-6 text-typography-gray">{body}</Text>
+            {/* <Text className="text-[15px] leading-6 text-typography-gray">{body}</Text> */}
             {children}
             {footer}
           </VStack>
