@@ -1,9 +1,11 @@
-import { useColorScheme } from 'nativewind';
+import { useAppTheme } from '@/components/theme/AppThemeProvider';
 import type { ThemeMode } from '@/constants/theme';
 
-/** System theme mode, normalised to 'light' | 'dark'. Matches GluestackUIProvider mode. */
+/**
+ * Effective theme mode. Follows the user's Appearance setting
+ * (Light / Dark / System), not just the phone scheme.
+ */
 export function useThemeMode(): { mode: ThemeMode; isDark: boolean } {
-  const { colorScheme } = useColorScheme();
-  const mode: ThemeMode = colorScheme === 'dark' ? 'dark' : 'light';
-  return { mode, isDark: mode === 'dark' };
+  const { mode, isDark } = useAppTheme();
+  return { mode, isDark };
 }

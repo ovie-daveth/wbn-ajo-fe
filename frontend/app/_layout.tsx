@@ -5,13 +5,12 @@ if (typeof (globalThis as any).Buffer === 'undefined') {
   (globalThis as any).Buffer = Buffer;
 }
 import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
+import { AppThemeProvider, useAppTheme } from '@/components/theme/AppThemeProvider';
 import { useFonts } from 'expo-font';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
-
-import { useColorScheme } from '@/components/useColorScheme';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -50,11 +49,19 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
+  return (
+    <AppThemeProvider>
+      <ThemedProviders />
+    </AppThemeProvider>
+  );
+}
+
+function ThemedProviders() {
+  const { mode } = useAppTheme();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <GluestackUIProvider mode={(colorScheme as 'light' | 'dark') ?? 'light'}>
+    <ThemeProvider value={mode === 'dark' ? DarkTheme : DefaultTheme}>
+      <GluestackUIProvider mode={mode}>
         <Stack>
           <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />

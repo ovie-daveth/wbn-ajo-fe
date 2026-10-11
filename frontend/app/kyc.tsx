@@ -1,5 +1,6 @@
 import { AppButton } from '@/components/common/AppButton';
 import { ThemedIcon } from '@/components/common/ThemedIcon';
+import { LivenessCheck } from '@/components/features/kyc/LivenessCheck';
 import { Heading } from '@/components/ui/heading';
 import { HStack } from '@/components/ui/hstack';
 import { Input, InputField } from '@/components/ui/input';
@@ -40,6 +41,11 @@ const STEPS = [
     body: 'One government ID unlocks money movement. We only store the number, never a photo.',
   },
   {
+    key: 'liveness',
+    title: 'Now show us it is you',
+    body: 'A quick face check ties your ID to a live person. Follow the prompts — it takes about 10 seconds.',
+  },
+  {
     key: 'review',
     title: 'Look it over',
     body: 'Tap any row to fix it. Submitting marks you verified instantly (demo — a real review queue lands with the backend).',
@@ -51,6 +57,7 @@ const TOTAL = STEPS.length;
 function validateStep(
   step: number,
   v: { name: string; phone: string; dob: string; address: string; idType: IdType | ''; idNumber: string },
+  livenessPassed: boolean,
 ): string | null {
   switch (step) {
     case 0:
@@ -68,6 +75,9 @@ function validateStep(
           ? `${v.idType} must be exactly 11 digits.`
           : 'That ID number looks too short.';
       }
+      return null;
+    case 3:
+      if (!livenessPassed) return 'Complete the face check to continue.';
       return null;
     default:
       return null;
@@ -89,6 +99,8 @@ export default function KycScreen() {
   const [address, setAddress] = useState('');
   const [idType, setIdType] = useState<IdType | ''>('');
   const [idNumber, setIdNumber] = useState('');
+  const [livenessPassed, setLivenessPassed] = useState(false);
+  const [livenessScore, setLivenessScore] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -101,13 +113,14 @@ export default function KycScreen() {
       setAddress(profile.address);
       setIdType(profile.idType);
       setIdNumber(profile.idNumber);
+      setLivenessPassed(profile.livenessPassed);
     })();
   }, []);
 
   const values = { name, phone, dob, address, idType, idNumber };
 
   const goNext = () => {
-    const problem = validateStep(step, values);
+    const problem = validateStep(step, values, livenessPassed);
     if (problem) {
       setError(problem);
       return;
@@ -126,8 +139,8 @@ export default function KycScreen() {
   };
 
   const submit = async () => {
-    for (let s = 0; s < 3; s++) {
-      const problem = validateStep(s, values);
+    for (let s = 0; s < TOTAL - 1; s++) {
+      const problem = validateStep(s, values, livenessPassed);
       if (problem) {
         setError(problem);
         setStep(s);
@@ -144,6 +157,8 @@ export default function KycScreen() {
         address: address.trim(),
         idType,
         idNumber: idNumber.trim(),
+        livenessPassed,
+        livenessAt: new Date().toISOString(),
         kycStatus: 'verified', // demo: instant verify until backend review lands
         updatedAt: null,
       };
@@ -165,6 +180,11 @@ export default function KycScreen() {
     { label: 'Date of birth', value: dob.trim(), goto: 1 },
     { label: 'Address', value: address.trim(), goto: 1 },
     { label: 'ID', value: idType ? `${idType} · ${idNumber.trim()}` : '', goto: 2 },
+    {
+      label: 'Face check',
+      value: livenessPassed ? `Passed · ${Math.round(livenessScore * 100)}% match` : '',
+      goto: 3,
+    },
   ];
 
   return (
@@ -353,12 +373,25 @@ export default function KycScreen() {
                 )}
 
                 {step === 3 && (
+                  <LivenessCheck
+                    key={`liveness-${livenessPassed ? 'done' : 'fresh'}`}
+                    onComplete={(r) => {
+                      setLivenessPassed(true);
+                      setLivenessScore(r.score);
+                      setError(null);
+                      setStep(4);
+                    }}
+                  />
+                )}
+
+                {step === 4 && (
                   <VStack className="gap-2">
                     {reviewRows.map((row) => (
                       <Pressable
                         key={row.label}
                         onPress={() => {
                           setError(null);
+                          if (row.goto === 3) setLivenessPassed(false);
                           setStep(row.goto);
                         }}
                         className="flex-row items-center justify-between rounded-2xl border border-border bg-card px-4 py-3 active:opacity-70"
@@ -379,7 +412,8 @@ export default function KycScreen() {
           </ScrollView>
 
           <View style={{ paddingBottom: Math.max(insets.bottom, 16) + 8 }} className="px-6">
-            {step < TOTAL - 1 ? (
+            {/* Liveness drives itself (auto-advances) — no footer CTA needed. */}
+            {step === 3 ? null : step < TOTAL - 1 ? (
               <AppButton title="Continue" onPress={goNext} variant="dark" />
             ) : (
               <AppButton title="Submit for verification" onPress={submit} loading={busy} variant="dark" />

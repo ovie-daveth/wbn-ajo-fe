@@ -23,6 +23,9 @@ export type MemberProfile = {
   address: string;
   idType: IdType | '';
   idNumber: string;
+  /** Simulated liveness result until the face-verification API lands. */
+  livenessPassed: boolean;
+  livenessAt: string | null;
   kycStatus: KycStatus;
   updatedAt: string | null;
 };
@@ -36,6 +39,8 @@ export const EMPTY_PROFILE: MemberProfile = {
   address: '',
   idType: '',
   idNumber: '',
+  livenessPassed: false,
+  livenessAt: null,
   kycStatus: 'incomplete',
   updatedAt: null,
 };
@@ -61,7 +66,7 @@ export async function clearProfile(): Promise<void> {
   await SecureStore.deleteItemAsync(PROFILE_KEY);
 }
 
-/** Every profile + KYC field filled in. */
+/** Every profile + KYC field filled in, including the face check. */
 export function isProfileComplete(p: MemberProfile): boolean {
   return (
     p.fullName.trim().length >= 2 &&
@@ -69,7 +74,8 @@ export function isProfileComplete(p: MemberProfile): boolean {
     isValidDob(p.dob) &&
     p.address.trim().length >= 6 &&
     p.idType !== '' &&
-    isValidIdNumber(p.idType, p.idNumber)
+    isValidIdNumber(p.idType, p.idNumber) &&
+    p.livenessPassed
   );
 }
 

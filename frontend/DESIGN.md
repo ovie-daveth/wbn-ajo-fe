@@ -129,9 +129,10 @@ Loan rates as `3.00% APR` + one-line explainer beneath. **No savings-interest co
   or `rounded-xl` (in-card). Bottom tab bar: floating dark pill.
 - Spacing: screen padding `p-5`, card gaps `gap-3/4`, section gap `gap-5`.
 - Shadows: `shadow-soft-1` on the floating tab bar (both modes use borders elsewhere).
-- Bottom nav: floating black pill (`rounded-full bg-black`) on the layout background,
-  active tab = white capsule with icon + label, inactive = dimmed bare icons.
-  Safe-area padded so it never touches system navigation.
+- Bottom nav: floating pill that follows the theme — white bar + black active capsule
+  in light mode, inverted in dark mode — on the layout background. Active tab shows
+  icon + label, inactive = dimmed bare icons. Safe-area padded so it never touches
+  system navigation.
 
 ## 5. Compartmentalised architecture (reusable components)
 
@@ -205,8 +206,8 @@ Plain surface (no hero gradient), all inside one `ScrollView` above the standard
 5. `ContributionsSection` (`SectionHeader` title `Contributions`, action `Contribute`, subtitle
    `Weekly and monthly dues keep your membership active`): rows with check icon + name +
    amount + status (`Weekly Contribution ₦5,000 Paid`, `October Dues ₦20,000 Due Friday`).
-6. `InvestTabBar`: floating black pill, exactly 3 tabs (Home / Analysis / Wallet),
-   active = white capsule with icon + label. Home renders the dashboard until the real
+6. `InvestTabBar`: floating theme-aware pill, exactly 3 tabs (Home / Analysis / Wallet),
+   active = contrasting capsule with icon + label. Home renders the dashboard until the real
    Home design lands; Analysis/Wallet are branded placeholders.
 
 Dark mode: same layout on plain surfaces; tiles go `bg-secondary`.
@@ -233,11 +234,19 @@ Dark mode: same layout on plain surfaces; tiles go `bg-secondary`.
       (expo-auth-session, needs OAuth client IDs in `.env` + dev build) + Apple
       (native button, iOS, works in Expo Go). Sessions persist in SecureStore (`utils/session.ts`). No backend yet.
 - [x] Rates centralized in `constants/rates.ts` (env-overridable, §9 reference).
-- [x] Contribute flow (`/contribute`: frequency + presets/custom + confirm + receipt,
-      demo ledger in SecureStore) gated by `KycGateModal` — incomplete profile/KYC opens
-      the modal instead. Profile + KYC journey (`/kyc`: name/phone → dob/address →
-      ID type+number → review, `utils/profile.ts` demo stub, instant-verify until the
-      backend `/members/*` review queue lands). Drawer shows live KYC status + entry point.
+- [x] Contribute flow (`/contribute`: frequency + presets/custom → payment method →
+      receipt, demo ledger in SecureStore) gated by `KycGateModal` — incomplete profile/KYC opens
+      the modal instead. Payment options: Bank Transfer (demo virtual account in
+      `constants/payments.ts`, tap-to-copy + "I've sent the money"), Debit Card (number /
+      expiry / CVV / name, Luhn + expiry checks), OPay and Paystack (demo stubs until
+      provider keys land). Profile + KYC journey (`/kyc`: name/phone → dob/address →
+      ID type+number → face liveness (`LivenessCheck`, front camera via `expo-camera`,
+      simulated prompts + demo fallback until the verification API lands) → review,
+      `utils/profile.ts` demo stub, instant-verify until the backend `/members/*`
+      review queue lands). Drawer shows live KYC status + entry point.
+- [x] Appearance setting (drawer: System / Light / Dark), persisted on device
+      (`utils/themePreference.ts`) and applied app-wide via `AppThemeProvider` + Gluestack
+      mode — `useThemeMode` reflects the choice on every screen.
 - [ ] Real Home design (Invest dashboard currently stands in; move it aside then) /
       Analysis / Wallet tab content.
 

@@ -76,7 +76,7 @@ module.exports = {
 
         typography: {
           white: '#FFFFFF',
-          gray: '#D4D4D4',
+          gray: 'rgb(var(--muted-foreground)/<alpha-value>)',
           black: '#181718',
         },
 

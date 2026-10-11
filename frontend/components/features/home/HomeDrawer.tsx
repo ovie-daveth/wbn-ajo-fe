@@ -10,9 +10,11 @@ import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
 import { clearSession, type MemberSession } from '@/utils/session';
 import { isKycVerified, loadProfile, type KycStatus } from '@/utils/profile';
+import { useAppTheme } from '@/components/theme/AppThemeProvider';
+import type { ThemePreference } from '@/utils/themePreference';
 import { router } from 'expo-router';
 import type { LucideIcon } from 'lucide-react-native';
-import { Award, BadgeCheck, LogOut, Mail, Phone, User, X } from 'lucide-react-native';
+import { Award, BadgeCheck, LogOut, Mail, Moon, Phone, Smartphone, Sun, User, X } from 'lucide-react-native';
 import { Pressable, ScrollView } from 'react-native';
 import { useEffect, useState } from 'react';
 import Animated, { FadeIn, FadeOut, SlideInLeft, SlideOutLeft } from 'react-native-reanimated';
@@ -54,6 +56,7 @@ function ProfileRow({
  * saved profile (`utils/profile.ts`).
  */
 export function HomeDrawer({ open, session, onClose }: HomeDrawerProps) {
+  const { preference, setPreference, isDark } = useAppTheme();
   const [kycStatus, setKycStatus] = useState<KycStatus>('incomplete');
   const [profilePhone, setProfilePhone] = useState('');
 
@@ -149,6 +152,56 @@ export function HomeDrawer({ open, session, onClose }: HomeDrawerProps) {
                   router.push('/kyc');
                 }}
               />
+
+              <VStack className="mt-4 gap-2">
+                <Text className="text-[11px] font-semibold uppercase tracking-wider text-typography-gray">
+                  Appearance
+                </Text>
+                <HStack className="gap-2">
+                  {(
+                    [
+                      { value: 'system', label: 'System', icon: Smartphone },
+                      { value: 'light', label: 'Light', icon: Sun },
+                      { value: 'dark', label: 'Dark', icon: Moon },
+                    ] as { value: ThemePreference; label: string; icon: LucideIcon }[]
+                  ).map((opt) => {
+                    const selected = preference === opt.value;
+                    const onChip = isDark ? '#0A0F1E' : '#FFFFFF';
+                    return (
+                      <Pressable
+                        key={opt.value}
+                        onPress={() => setPreference(opt.value)}
+                        accessibilityRole="button"
+                        accessibilityLabel={`${opt.label} theme`}
+                        accessibilityState={{ selected }}
+                        android_ripple={{ color: 'rgba(47,103,246,0.2)', borderless: false }}
+                        style={({ pressed }) => [{ opacity: pressed ? 0.75 : 1 }]}
+                        className={
+                          selected
+                            ? 'flex-1 items-center gap-1 rounded-2xl bg-typography-black px-2 py-3 dark:bg-white'
+                            : 'flex-1 items-center gap-1 rounded-2xl border border-border px-2 py-3'
+                        }
+                      >
+                        {selected ? (
+                          <opt.icon size={20} color={onChip} />
+                        ) : (
+                          <ThemedIcon icon={opt.icon} size={20} />
+                        )}
+                        <Text
+                          style={selected ? { color: onChip } : undefined}
+                          className={
+                            selected
+                              ? 'text-xs font-bold'
+                              : 'text-xs font-medium text-typography-gray'
+                          }
+                        >
+                          {opt.label}
+                        </Text>
+                      </Pressable>
+                    );
+                  })}
+                </HStack>
+              </VStack>
             </ScrollView>
 
             <Pressable

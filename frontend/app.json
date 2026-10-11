@@ -29,6 +29,14 @@
       "expo-router",
       "expo-apple-authentication",
       [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow wbn-Invest to access your camera for face verification",
+          "recordAudioAndroid": false,
+          "barcodeScannerEnabled": false
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",
