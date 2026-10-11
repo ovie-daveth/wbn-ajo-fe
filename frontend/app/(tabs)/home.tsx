@@ -5,12 +5,11 @@ import { LoanCards } from '@/components/features/invest/LoanCards';
 import { PocketPill } from '@/components/features/invest/PocketPill';
 import { QuickActionGrid } from '@/components/features/invest/QuickActionGrid';
 import { KycGateModal } from '@/components/features/kyc/KycGateModal';
+import { useKycGate } from '@/components/features/kyc/useKycGate';
 import { VStack } from '@/components/ui/vstack';
 import { useThemeMode } from '@/hooks/useThemeMode';
-import { isKycVerified, loadProfile } from '@/utils/profile';
 import { loadSession, type MemberSession } from '@/utils/session';
 import { StatusBar } from 'expo-status-bar';
-import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -25,26 +24,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function HomeScreen() {
   const { mode } = useThemeMode();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [gateOpen, setGateOpen] = useState(false);
   const [session, setSession] = useState<MemberSession | null>(null);
+  const { gateOpen, closeGate, requestContribute, finishKyc } = useKycGate();
 
   useEffect(() => {
     loadSession().then(setSession);
   }, []);
-
-  const handleContribute = async () => {
-    const profile = await loadProfile();
-    if (!isKycVerified(profile)) {
-      setGateOpen(true);
-      return;
-    }
-    router.push('/contribute');
-  };
-
-  const handleFinishKyc = () => {
-    setGateOpen(false);
-    router.push({ pathname: '/kyc', params: { returnTo: '/contribute' } });
-  };
 
   return (
     <View className="flex-1 bg-background">
@@ -58,18 +43,14 @@ export default function HomeScreen() {
           <VStack className="gap-4 px-5 pb-6 pt-2">
             <BalanceHeader onMenuPress={() => setDrawerOpen(true)} />
             <PocketPill />
-            <QuickActionGrid onContribute={handleContribute} />
+            <QuickActionGrid onContribute={requestContribute} />
             <LoanCards />
-            <ContributionsSection onContribute={handleContribute} />
+            <ContributionsSection onContribute={requestContribute} />
           </VStack>
         </ScrollView>
       </SafeAreaView>
       <HomeDrawer open={drawerOpen} session={session} onClose={() => setDrawerOpen(false)} />
-      <KycGateModal
-        visible={gateOpen}
-        onClose={() => setGateOpen(false)}
-        onCompleteKyc={handleFinishKyc}
-      />
+      <KycGateModal visible={gateOpen} onClose={closeGate} onCompleteKyc={finishKyc} />
     </View>
   );
 }

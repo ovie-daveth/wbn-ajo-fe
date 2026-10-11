@@ -10,8 +10,8 @@ import { demoReceivingAccount } from '@/constants/payments';
 import { rates } from '@/constants/rates';
 import { formatMoney, formatWholeNaira } from '@/utils/format';
 import { loadSession } from '@/utils/session';
-import * as Clipboard from 'expo-clipboard';
-import * as SecureStore from 'expo-secure-store';
+import { setStringAsync as copyToClipboard } from 'expo-clipboard';
+import { addCard, detectCardBrand, recordLedgerEntry } from '@/utils/wallet';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import {
@@ -33,8 +33,6 @@ import Animated, { FadeInUp, ZoomIn } from 'react-native-reanimated';
 type Frequency = 'Weekly' | 'Monthly';
 type Stage = 'amount' | 'pay' | 'done';
 type MethodKey = 'transfer' | 'card' | 'opay' | 'paystack';
-
-const RECORDS_KEY = 'wbn-invest-contributions';
 
 const METHODS: { key: MethodKey; label: string; sub: string; icon: LucideIcon }[] = [
   { key: 'transfer', label: 'Bank Transfer', sub: 'Free · arrives in minutes', icon: Landmark },
@@ -98,6 +96,7 @@ export default function ContributeScreen() {
   const [expiry, setExpiry] = useState('');
   const [cvv, setCvv] = useState('');
   const [cardName, setCardName] = useState('');
+  const [saveCard, setSaveCard] = useState(true);
   const [copied, setCopied] = useState<string | null>(null);
   const [email, setEmail] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -142,10 +141,7 @@ export default function ContributeScreen() {
     setBusy(true);
     try {
       // Demo ledger — TODO: replace with POST /contributions.
-      const raw = await SecureStore.getItemAsync(RECORDS_KEY);
-      const list = raw ? (JSON.parse(raw) as unknown[]) : [];
-      list.push({ amount, frequency, method: methodUsed, at: new Date().toISOString() });
-      await SecureStore.setItemAsync(RECORDS_KEY, JSON.stringify(list));
+      await recordLedgerEntry({ kind: 'contribution', amount, frequency, method: methodUsed });
       await new Promise<void>((resolve) => setTimeout(resolve, 1200)); // simulate processing
       setDone({ amount, frequency, method: methodUsed });
       setStage('done');
@@ -175,7 +171,17 @@ export default function ContributeScreen() {
     }
     setError(null);
     // TODO: swap for Paystack/OPay card-charge call.
-    recordAndFinish('Debit Card');
+    recordAndFinish('Debit Card').then(() => {
+      // Persist brand + last4 only — never the PAN or CVV.
+      if (saveCard) {
+        addCard({
+          brand: detectCardBrand(cardDigits),
+          last4: cardDigits.slice(-4),
+          expiry,
+          holder: cardName.trim(),
+        }).catch(() => {});
+      }
+    });
   };
 
   const payWithWallet = (label: string) => {
@@ -185,7 +191,7 @@ export default function ContributeScreen() {
   };
 
   const copyField = async (key: string, value: string) => {
-    await Clipboard.setStringAsync(value);
+    await copyToClipboard(value);
     setCopied(key);
     setTimeout(() => setCopied((c) => (c === key ? null : c)), 1500);
   };
@@ -520,6 +526,24 @@ export default function ContributeScreen() {
                             />
                           </Input>
                         </VStack>
+                        <Pressable
+                          onPress={() => setSaveCard((s) => !s)}
+                          accessibilityRole="checkbox"
+                          accessibilityState={{ checked: saveCard }}
+                          accessibilityLabel="Save this card"
+                          className="flex-row items-center gap-2.5 py-1"
+                        >
+                          <View
+                            className={
+                              saveCard
+                                ? 'h-5 w-5 items-center justify-center rounded-md bg-primary'
+                                : 'h-5 w-5 rounded-md border-2 border-border'
+                            }
+                          >
+                            {saveCard && <Check size={13} color="#fff" />}
+                          </View>
+                          <Text className="text-sm">Save this card for next time</Text>
+                        </Pressable>
                       </VStack>
                     </Animated.View>
                   )}

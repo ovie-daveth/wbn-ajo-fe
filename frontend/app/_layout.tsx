@@ -67,6 +67,7 @@ function ThemedProviders() {
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="contribute" options={{ headerShown: false }} />
+          <Stack.Screen name="withdraw" options={{ headerShown: false }} />
           <Stack.Screen name="kyc" options={{ headerShown: false }} />
           <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
         </Stack>

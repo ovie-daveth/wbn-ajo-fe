@@ -247,8 +247,14 @@ Dark mode: same layout on plain surfaces; tiles go `bg-secondary`.
 - [x] Appearance setting (drawer: System / Light / Dark), persisted on device
       (`utils/themePreference.ts`) and applied app-wide via `AppThemeProvider` + Gluestack
       mode — `useThemeMode` reflects the choice on every screen.
+- [x] Wallet tab (`(tabs)/wallet`): live balance from the local contribution ledger,
+      preferred contribution methods (saved cards — brand + last4 only, set preferred,
+      remove), connected withdrawal account (bottom-sheet form, 10-digit NUBAN check),
+      receiving (transfer) account with tap-to-copy, recent activity, KYC-gated
+      Contribute and Withdraw entries (`/withdraw`: amount + max, destination summary,
+      demo ledger until payouts backend lands).
 - [ ] Real Home design (Invest dashboard currently stands in; move it aside then) /
-      Analysis / Wallet tab content.
+      Analysis tab content.
 
 ## 9. Configurable rates (env → `constants/rates.ts` → every screen)
 
